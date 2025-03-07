@@ -109,11 +109,22 @@
       margin-bottom: 10px;
       color: #495057;
     }
+
+    .languages span {
+      margin-right: 10px;
+    }
+
+    .languages {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .badge {
       display: inline-block;
       color: rgb(25, 22, 22);
       padding: 5px 8px;
-      background: rgb(158, 220, 220);
+      background: rgb(0 0 0 / 6%);
       border-radius: 15px;
       font-size: 0.9rem;
       margin-right: 5px;
@@ -138,7 +149,15 @@
         text-align: center;
       }
       .download-button{
-        display: none;
+        display: block;
+      }
+      .section h3 {
+        font-size: 1.5rem;
+        color: teal;
+        border-bottom: 2px solid black;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+        background-color: whitesmoke;
       }
       .contact a {
         font-size: 0.9rem;
@@ -171,13 +190,14 @@
         margin-bottom: 10px;
       }
       .download-button{
-        display: none;
+        display: block;
       }
       .download-button a {
         padding: 8px 20px;
         font-size: 0.9rem;
       }
       .section h3 {
+        font-size: 1.5rem;
         color: teal;
         border-bottom: 2px solid black;
         padding-bottom: 5px;
@@ -192,7 +212,7 @@
         display: inline-block;
         color: rgb(25, 22, 22);
         /* padding: 5px 8px; */
-        background: rgb(158, 220, 220);
+        background: rgb(0 0 0 / 6%);
         border-radius: 15px;
         /* font-size: 0.9rem; */
         margin-top: 2px;
@@ -248,6 +268,7 @@
       <ul>
         <li><strong>AI Personal Assistant - DeVen (Dynamic Efficient Visionary Enhanced Neural)</strong><br> An AI-powered personal assistant featuring voice recognition, real-time task management, and a custom GUI using PyQt5. <br><a href="https://www.mediafire.com/file/8pfh585yfie2q6z/ui.exe/file"><u>DeVen</u></a>: http://mediafire.com/file/8pfh585yfie2q6z/ui.exe</li>
         <li><strong>Weather Forecast Web Page with Search History Storage- AtmosAlert</strong><br> Real-time, location-based weather updates with an intuitive Glassmorphism design and database-backed search history. <br><a href="http://climalert.wuaze.com"><u>AtmosAlert</u></a>: http://climalert.wuaze.com</li>
+        <li><strong>Linktree Clone - Full-Stack Web Application</strong><br> Built a full-stack Linktree clone with a JavaScript (Node.js/Express) API, MySQL, and Redis, plus an HTML/CSS/JS frontend. Deployed using CLI tools for network access. <br><a href="https://github.com/rosnnn/linktree-clone"><u>Linktree Clone - Full-Stack Web Application</u></a>: https://github.com/rosnnn/linktree-clone</li>
       </ul>
     </div>
     
@@ -256,10 +277,13 @@
       <p class="Badge">
         <span class="badge">HTML</span>
         <span class="badge">CSS</span>
-        <span class="badge">JavaScript</span>
+        <span class="badge">JavaScript (Node.js, Express, React.js)</span>
+        <span class="badge">Redis</span>
+        <span class="badge">CLI</span>
         <span class="badge">C</span>
         <span class="badge">Python</span>
         <span class="badge">PHP</span>
+        <span class="badge">MongoDb</span>
         <span class="badge">SQL</span>
       </p>
     </div>
@@ -274,11 +298,11 @@
     
     <div class="section">
       <h3>Languages</h3>
-      <ul>
-        <li><b>English</b> - Full Professional Proficiency</li>
-        <li><b>Hindi</b> - Full Professional Proficiency</li>
-        <li><b>Nepali</b> - Full Professional Proficiency</li>
-      </ul>
+      <p class="languages">
+        <span><b>English</b> - Full Professional Proficiency</span> | 
+        <span><b>Hindi</b> - Full Professional Proficiency</span> | 
+        <span><b>Nepali</b> - Full Professional Proficiency</span>
+      </p>
     </div>
     
     <div class="section">
@@ -296,55 +320,121 @@
 
   <script>
     async function downloadResume() {
-        const { jsPDF } = window.jspdf;
-        let element = document.querySelector(".container"); // Target only .container class
+      const { jsPDF } = window.jspdf;
+      let element = document.querySelector(".container");
+      let downloadButton = document.querySelector(".download-button");
   
-        // Ensure the full container content is captured
-        element.style.minHeight = element.scrollHeight + "px";
-  
-        // Wait for style changes to apply
-        await new Promise(resolve => setTimeout(resolve, 100));
-  
-        // Detect if the user is on a mobile device
-        const isMobile = window.innerWidth <= 768;
-        const scaleFactor = isMobile ? 3 : 2; // Higher scale for mobile clarity
-  
-        // Capture the full container as an image
-        const canvas = await html2canvas(element, {
-            scale: scaleFactor,
-            useCORS: true,
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: element.scrollWidth,  // Capture full width
-            windowHeight: element.scrollHeight // Capture full height
-        });
-  
-        const imgData = canvas.toDataURL("image/jpeg", 0.8);
-  
-        // Create a PDF
-        const doc = new jsPDF("p", "mm", "a4");
-  
-        // Calculate PDF height based on container aspect ratio
-        const pdfWidth = doc.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
-        // Add captured image to PDF
-        doc.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-  
-        // If PDF is too large, compress it
-        const pdfOutput = doc.output("blob");
-        if (pdfOutput.size > 1000000) { // If larger than 1MB
-            doc.deletePage(1);
-            const canvasLowQuality = await html2canvas(element, {
-                scale: isMobile ? 2 : 1.5, // Reduce scale to decrease file size
-                useCORS: true
-            });
-            const imgLowQuality = canvasLowQuality.toDataURL("image/jpeg", 0.6);
-            doc.addImage(imgLowQuality, "JPEG", 0, 0, pdfWidth, (canvasLowQuality.height * pdfWidth) / canvasLowQuality.width);
+      // Store original styles
+      const originalStyles = {
+        container: {
+          position: element.style.position,
+          width: element.style.width,
+          height: element.style.height,
+          overflow: element.style.overflow
+        },
+        downloadButton: {
+          display: downloadButton.style.display
         }
+      };
   
-        // Save the PDF with a filename
-        doc.save("Resume.pdf");
+      // Hide download button during capture
+      downloadButton.style.display = 'none';
+  
+      // Force content visibility and fit to A4 width
+      element.style.position = 'static';
+      element.style.width = '900px';
+      element.style.height = 'auto';
+      element.style.overflow = 'visible';
+      element.style.boxSizing = 'border-box';
+  
+      // Wait for style changes
+      await new Promise(resolve => setTimeout(resolve, 200));
+      const fullHeight = element.getBoundingClientRect().height;
+  
+      // Optimize scale factor
+      const isMobile = window.innerWidth <= 768;
+      const scaleFactor = isMobile ? 1.2 : 1.5;
+  
+      // Capture content with enhanced quality for circular image
+      const canvas = await html2canvas(element, {
+        scale: scaleFactor,
+        useCORS: true,
+        width: element.scrollWidth,
+        height: fullHeight,
+        windowWidth: element.scrollWidth,
+        windowHeight: fullHeight,
+        scrollY: 0,
+        scrollX: 0,
+        imageTimeout: 0, // Ensure image loads fully
+        onclone: (doc) => {
+          const clonedElement = doc.querySelector('.container');
+          const clonedButton = doc.querySelector('.download-button');
+          const clonedImg = doc.querySelector('.logo img');
+          clonedElement.style.height = 'auto';
+          clonedElement.style.overflow = 'visible';
+          clonedElement.style.paddingBottom = '0px';
+          clonedElement.style.marginBottom = '0px';
+          clonedElement.style.filter = 'brightness(110%)';
+          if (clonedButton) clonedButton.style.display = 'none';
+          if (clonedImg) {
+            // Ensure circular rendering
+            clonedImg.style.borderRadius = '50%';
+            clonedImg.style.transform = 'scale(1)'; // Prevent scaling artifacts
+            clonedImg.style.imageRendering = 'auto'; // Improve image quality
+          }
+          return doc;
+        }
+      });
+  
+      // Convert to image with optimized quality
+      const imgData = canvas.toDataURL("image/jpeg", 0.7);
+      const doc = new jsPDF("p", "mm", "a4");
+      const pdfWidth = doc.internal.pageSize.getWidth();
+      const pdfHeight = doc.internal.pageSize.getHeight();
+  
+      // Calculate content height in PDF units
+      const imgHeight = canvas.height;
+      const imgWidth = canvas.width;
+      const contentHeightInMm = (imgHeight * pdfWidth) / imgWidth;
+  
+      // Debugging output
+      console.log({
+        canvasHeight: imgHeight,
+        canvasWidth: imgWidth,
+        contentHeightInMm: contentHeightInMm,
+        pdfHeight: pdfHeight,
+        fitsOnOnePage: contentHeightInMm <= pdfHeight,
+        fullHeightPx: fullHeight
+      });
+  
+      // Force single page by scaling if necessary
+      let finalHeight = contentHeightInMm;
+      if (contentHeightInMm > pdfHeight) {
+        const scaleRatio = pdfHeight / contentHeightInMm;
+        finalHeight = pdfHeight;
+        console.log(`Content exceeds page height, scaling down by ratio: ${scaleRatio}`);
+      }
+  
+      // Add image to single page
+      doc.addImage(
+        imgData,
+        "JPEG",
+        0,
+        0,
+        pdfWidth,
+        finalHeight,
+        null,
+        "FAST"
+      );
+  
+      // Restore original styles
+      Object.assign(element.style, originalStyles.container);
+      downloadButton.style.display = originalStyles.downloadButton.display;
+  
+      // Save the PDF and log file size
+      const pdfBlob = doc.output('blob');
+      console.log(`PDF Size: ${(pdfBlob.size / 1024).toFixed(2)} KB`);
+      doc.save("Resume.pdf");
     }
   </script>  
 </body>
